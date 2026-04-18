@@ -4,7 +4,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 
 /**
- * @author pine
+ * @author zmt
  */
 public class RedisLuaScriptConstant {
 

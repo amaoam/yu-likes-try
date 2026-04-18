@@ -2,6 +2,9 @@ package com.zmt.yulikestry.mapper;
 
 import com.zmt.yulikestry.model.entity.Blog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Map;
 
 /**
 * @author ZMT
@@ -10,7 +13,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.zmt.yulikestry.model.entity.Blog
 */
 public interface BlogMapper extends BaseMapper<Blog> {
-
+    
+    void batchUpdateThumbCount(@Param("countMap") Map<Long, Long> countMap);
 }
 
 

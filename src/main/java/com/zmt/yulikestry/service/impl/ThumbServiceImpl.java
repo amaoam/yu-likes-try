@@ -10,6 +10,7 @@ import com.zmt.yulikestry.model.entity.User;
 import com.zmt.yulikestry.service.BlogService;
 import com.zmt.yulikestry.service.ThumbService;
 import com.zmt.yulikestry.service.UserService;
+import com.zmt.yulikestry.util.RedisKeyUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 * @description 针对表【thumb】的数据库操作Service实现
 * @createDate 2026-04-16 16:59:15
 */
-@Service
+@Service("thumbService")
 @Slf4j
 @RequiredArgsConstructor
 public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb> implements ThumbService {
@@ -61,7 +62,7 @@ public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb> implements
                 boolean success = update && this.save(thumb);
                 // 点赞记录存入 Redis  
                 if (success) {
-                    redisTemplate.opsForHash().put(ThumbConstant.USER_THUMB_KEY_PREFIX + loginUser.getId().toString(), blogId.toString(), thumb.getId());
+                    redisTemplate.opsForHash().put(RedisKeyUtil.getUserThumbKey(loginUser.getId()), blogId.toString(), thumb.getId());
                 }
                 // 更新成功才执行  
                 return success;
@@ -82,7 +83,7 @@ public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb> implements
 //                        .eq(Thumb::getId,loginUser.getId())
 //                        .one();
 //                if(thumb==null) throw new RuntimeException("用户未点赞");
-                Object thumbObj = redisTemplate.opsForHash().get(ThumbConstant.USER_THUMB_KEY_PREFIX+loginUser.getId(),blogId.toString());
+                Object thumbObj = redisTemplate.opsForHash().get(RedisKeyUtil.getUserThumbKey(loginUser.getId()),blogId.toString());
                 if(thumbObj==null){
                     throw new RuntimeException("用户未点赞");
                 }
@@ -94,7 +95,7 @@ public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb> implements
                 
                 boolean success =  update&&this.removeById(thumbId);
                 if(success){
-                    redisTemplate.opsForHash().delete(ThumbConstant.USER_THUMB_KEY_PREFIX+loginUser.getId(),blogId.toString());
+                    redisTemplate.opsForHash().delete(RedisKeyUtil.getUserThumbKey(loginUser.getId()),blogId.toString());
                 }
                 return success;
             });
@@ -103,7 +104,7 @@ public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb> implements
 
     @Override
     public Boolean hasThumb(Long blogId, Long userId) {
-        return redisTemplate.opsForHash().hasKey(ThumbConstant.USER_THUMB_KEY_PREFIX+userId,blogId.toString());
+        return redisTemplate.opsForHash().hasKey(RedisKeyUtil.getUserThumbKey(userId),blogId.toString());
     }
 
 
