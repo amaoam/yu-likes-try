@@ -118,4 +118,6 @@ public class RedisLuaScriptConstant {
             redis.call("HDEL", userThumbKey, blogId)
             return 1
             """, Long.class);
+    
+    
 }
