@@ -37,6 +37,7 @@ public class ThumbServiceRedisImpl extends ServiceImpl<ThumbMapper, Thumb> imple
     private final UserService userService;
     
     private final RedisTemplate<String,Object> redisTemplate;
+    
 
     @Override
     public Boolean doThumb(DoThumbRequest doThumbRequest, HttpServletRequest request) {

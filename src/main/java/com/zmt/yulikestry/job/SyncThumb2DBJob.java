@@ -48,8 +48,8 @@ public class SyncThumb2DBJob {
             second = 50;
             nowDate = DateUtil.offsetMinute(nowDate,-1);
         }
-        String date = DateUtil.format(nowDate,"HH::mm:")+second;
-        
+        String date = DateUtil.format(nowDate,"HH:mm:")+second;
+        syncThumb2DBByDate(date);
         log.info("临时数据同步完成");
     }
     
