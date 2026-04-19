@@ -47,7 +47,7 @@ public class ThumbServiceMQImpl extends ServiceImpl<ThumbMapper, Thumb>
                 RedisLuaScriptConstant.THUMB_SCRIPT_MQ,  
                 List.of(userThumbKey),  
                 blogId  
-        );  
+        );  //
         if (LuaStatusEnum.FAIL.getValue() == result) {  
             throw new RuntimeException("用户已点赞");  
         }  
